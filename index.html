@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- META DATA -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="MSSmartTagsPreventParsing" content="true" />
+    <meta http-equiv="imagetoolbar" content="no" />
+    <!--[if IE]><meta http-equiv="cleartype" content="on" /><![endif]-->
+    
+    <!-- SEO -->
+    <title>Parallax</title>
+    <meta name="description" content="" />
+    <meta name="author" content="Brad Anderson" />
+    
+    <style>
+
+body, html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.parallax-container {
+    position: relative;
+    height: 99%;
+    overflow-y: scroll;
+}
+
+.parallax-actuator {
+    width: 100%;
+    height: 2500px;
+    position: relative;
+}
+
+.pizza {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #f9f;
+}
+
+.pizza-box {
+    height: 100px;
+    width: 300px;
+    background: #ccc;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.ostrich-container {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.kitty {
+    width: 100%;
+    height: 100%;
+    background: url(http://placekitten.com/g/200/300);
+}
+
+    </style>
+    
+</head>
+
+<body>
+    
+<div id="parallax-container" class="parallax-container">
+
+    <div class="parallax-actuator">
+
+        <div class="kitty">
+        
+            <div id="pizza-box" class="pizza-box">
+                <div id="pizza" class="pizza"></div>
+            </div>
+
+            <div class="ostrich-container">
+                <img src="assets/images/ostrich.png" id="ostrich" />
+            </div>
+
+        </div>
+
+    </div>
+
+</div><!-- .parallax-container -->
+
+<script src="assets/scripts/lib/jquery.min.js"></script>
+<script src="assets/scripts/lib/jquery.mousewheel.min.js"></script>
+<script src="assets/scripts/lib/parallax.js"></script>
+<script src="assets/scripts/main.js"></script>
+
+</body>
+</html>
