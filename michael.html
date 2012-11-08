@@ -16,17 +16,17 @@
     
     <style>
 
-body {
-    margin: 0;
-    padding: 0;
-}
-
 .background-image {
     position: fixed;
     width: 100%;
 }
 
 .parallax-container {
+    background: url(assets/images/space.jpg);
+    background-size: 100% auto;
+}
+
+.parallax-actuator {
     position: relative;
     height: 2000px;
 }
@@ -41,9 +41,9 @@ body {
 
 <body>
 
-<img src="assets/images/space.jpg" class="background-image" />
-    
-<div id="parallax-container" class="parallax-container">
+
+<div class="parallax-container">
+    <div class="parallax-actuator" id="parallax-actuator"></div>
 </div>
 
 <script src="assets/scripts/lib/jquery.min.js"></script>

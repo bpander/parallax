@@ -3,7 +3,7 @@ var linearEasingFunction = function(p) {
     return p;
 };
 
-var parallaxContainer = document.getElementById('parallax-container');
+var parallaxActuator = document.getElementById('parallax-actuator');
 
 var tweens = [];
 var michaelImageSrc = 'assets/images/michael.png';
@@ -28,7 +28,7 @@ var spawnMichaels = function() {
         michael.style.width = michaelWidth * (z / 50) + 'px';
         michael.style.top = Math.random() * 800 + 1000 + 'px';
         michael.style.left = Math.random() * 100 - 20 + '%';
-        parallaxContainer.appendChild(michael);
+        parallaxActuator.appendChild(michael);
         new parallax.Tween(
             michael,
             'top',

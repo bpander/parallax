@@ -2,9 +2,12 @@
  * parallax.js
  * @author Brad Anderson
  * @description Tween elements based on the users scroll position or flip a switch when the user gets to a certain point in the page
- * @requires Nothing
+ * @requires jquery
+ * @requires jquery.mousewheel plugin
  * @example
- *  var tween = new parallax.Tween(
+    // JS
+    // Note: parallax.init() is called AFTER all the Tweens and Switches are created
+    var tween = new parallax.Tween(
         document.getElementById('pizza'),
         'left',
         '0px',
@@ -13,6 +16,12 @@
         220
     );
     parallax.init();
+
+    <!-- HTML -->
+    <!-- Note: parallax elements are wrapped in a '.parallax-container' -->
+    <div class="parallax-container">
+        <div id="pizza"></div>
+    </div>
  */
 
 ////////////
@@ -58,7 +67,7 @@ if (!Function.prototype.bind) {
 
 // CSS Eases
 $.easing['snap'] = function(x, t, b, c, d) {
-        return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
+    return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
 };
 
 var parallax = (function() {
@@ -76,8 +85,6 @@ var parallax = (function() {
 
     var _tweens = [];
 
-    var _$tweenElements = $();
-    
     var _switches = [];
 
     var _isScrolling = false;
@@ -86,8 +93,6 @@ var parallax = (function() {
     
     var _lastScrollTop = 0;
 
-    var _scrollMax = 0;
-    
     var _defaultEasingFunction = function(p) {
         return 0.5 + 0.5 * Math.sin(Math.PI * ( p - 0.5 ));
     };
@@ -99,15 +104,27 @@ var parallax = (function() {
      */
     parallax.init = function() {
 
-        // Bindings
-        this.$container = $('.parallax-container');
-        this.onResizeHandler = _onResize.bind(this);
+        // Prepare the parallax element
+        this.$container = $('.parallax-container')
+            .css({
+                position: 'relative',
+                height: '100%',
+                overflow: 'auto'
+            })
+        ;
+        // Ensure the body/html fill the window
+        $('body, html').css({
+            height: '100%',
+            margin: 0,
+            padding: 0
+        });
+
+        // Scope bindings
         this.onKeyDownHandler = _onKeyDown.bind(this);
         this.onScrollHandler = _onScroll.bind(this);
         this.onMousewheelHandler = _onMousewheel.bind(this);
 
         // Event bindings
-        $(window).on('resize', this.onResizeHandler);
         this.$container
             .on('mousewheel', this.onMousewheelHandler)
             .on('scroll', this.onScrollHandler)
@@ -120,7 +137,6 @@ var parallax = (function() {
      * Stop listening for the scroll event, also empty the private tweens array
      */
     parallax.exit = function() {
-        $(window).off('resize', this.onResizeHandler);
         this.$container
             .off('mousewheel', this.onMousewheelHandler)
             .off('scroll', this.onScrollHandler)
@@ -151,7 +167,6 @@ var parallax = (function() {
         easingFunction
     ) {
         this.element = element;
-        this.$element = $(element);
         this.property = property;
         this.start = parseFloat(start);
         this.end = parseFloat(end);
@@ -164,11 +179,6 @@ var parallax = (function() {
         this.change = this.end - this.start;
         this.units = start.split(this.start)[1];
         
-        if (animationEnd > _scrollMax) {
-            _scrollMax = animationEnd;
-        }
-        
-        _$tweenElements = _$tweenElements.add(element);
         _tweens.push(this);
     };
     
@@ -193,18 +203,14 @@ var parallax = (function() {
         this.start = start;
         this.end = end;
         this.delay = delay;
-
-        if (end > _scrollMax) {
-            _scrollMax = end;
-        }
         
         _switches.push(this);
     };
 
     parallax.update = function() {
         _scrollTop = this.$container.scrollTop();
-        _$tweenElements.stop();
 
+        // Iterate through the Tweens
         var l = _tweens.length;
         for (var i = 0; i < l; i++) {
             var tween = _tweens[i];
@@ -231,6 +237,7 @@ var parallax = (function() {
             tween.element.style[tween.property] = position + tween.units;
         }
         
+        // Iterate through the Switches
         l = _switches.length;
         for (var i = 0; i < l; i++) {
             var _switch = _switches[i];
@@ -244,6 +251,7 @@ var parallax = (function() {
     };
 
     var _onScroll = function(e) {
+        // Throttle updates using window.requestAnimationFrame
         if (!_isScrolling) {
             var self = this;
             requestAnimationFrame(function() {
@@ -252,10 +260,6 @@ var parallax = (function() {
             });
         }
         _isScrolling = true;
-    };
-
-    var _onResize = function(e) {
-        // TODO: Adjust body min-height property so the user is able to scroll to the lowest trigger point
     };
 
     var _onKeyDown = function(e) {
@@ -275,7 +279,7 @@ var parallax = (function() {
             this.$container.stop().animate({ scrollTop: this.$container.scrollTop() - this.scrollSpeed }, SCROLL_ANIM_OPTIONS);
         }
         return false;
-    }
+    };
     
     return parallax;
 })();
