@@ -20,7 +20,7 @@ var spawnMichaels = function() {
     var numMichaels = 10;
     
     for (var i = 0; i < numMichaels; i++) {
-        var michael = document.createElement('image');
+        var michael = document.createElement('img');
         var z = Math.round(Math.random() * 100);
         michael.src = michaelImageSrc;
         michael.className = 'michael';
